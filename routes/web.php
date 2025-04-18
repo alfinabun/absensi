@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\loginController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,13 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [loginController::class,'index'])->name('login');
-Route::post('/login', [loginController::class,'login'])->name('proses_login');
-Route::get('/admin', [AdminController::class,'index'])->name('dashboard');
-Route::get('/setting', [AdminController::class,'setting'])->name('setting');
-Route::get('/data', [AdminController::class,'data'])->name('data');
-Route::get('/datapegawai', [AdminController::class,'datapegawai'])->name('data_pegawai');
-Route::get('/kehadiran', [AdminController::class,'kehadiran'])->name('kehadiran');
+Route::get('/', [LoginController::class,'index'])->name('login');
+Route::post('/login', [LoginController::class,'proses_login'])->name('proses_login');
+Route::get('/logout', [LoginController::class,'logout'])->name('logout');
+
+
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/admin', [AdminController::class,'index'])->name('dashboard');
+    Route::get('/setting', [AdminController::class,'setting'])->name('setting');
+    Route::get('/data', [AdminController::class,'data'])->name('data');
+    Route::get('/datapegawai', [AdminController::class,'datapegawai'])->name('data_pegawai');
+    Route::get('/kehadiran', [AdminController::class,'kehadiran'])->name('kehadiran');
+    Route::get('/libur', [AdminController::class,'libur'])->name('libur');
+});
 
 
 Route::get('/welcome', function () {

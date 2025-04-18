@@ -18,6 +18,9 @@ class AdminController extends Controller
     public function kehadiran() {
         return view('admin.kehadiran');
     }
+    public function libur() {
+        return view('admin.libur');
+    }
     
  
 }

@@ -14,8 +14,9 @@
             width: 100%;
             border-radius: 0 10px 10px 0;
         }
-    
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   </head>
   <body style="background-color: #D8BFD8; color:white;">
     <div class="container mt-5">
@@ -28,20 +29,27 @@
                                 <div class="p-5">
                                     <div class="d-inline-flex align-items-center">
                                         <img src="{{ asset('image/logokarya.png') }}" alt="Logo" style="width: 100px; height: 100px; margin-right: 10px;">
-                                    <h1 class="h4 text-gray-900 mb-4 m-0" style="color: #a195c7; font-weight: bold; font-size: 30px; line-height: 20px;">ABSENSI</h1>
+                                        <h1 class="h4 text-gray-900 mb-4 m-0" style="color: #a195c7; font-weight: bold; font-size: 30px; line-height: 20px;">ABSENSI</h1>
                                     </div>
-                                    
+
                                     <form action="{{ route('proses_login') }}" method="POST" >
                                         @csrf
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input class="form-control" type="text" name="email" placeholder="Email" 
+                                            <input class="form-control" type="text" value="{{ old('email') }}" name="email" placeholder="Email"
+                                            value="{{ old('email') }}"
                                             style="background-color: #D8BFD8; border: 1px solid #f7f7f8;">
+                                            @error('email')
+                                                <div class="text-danger mt-1 text-sm">{{ $message }}</div>
+                                            @enderror
                                         </div><br>
                                         <div class="form-group">
                                             <label for="password">Password</label>
                                             <input class="form-control" type="password" name="password" placeholder="Your Password"
                                             style="background-color: #D8BFD8; border: 1px solid #f7f7f8;">
+                                            @error('password')
+                                                <div class="text-danger mt-1 text-sm">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                         <br><br>
                                         <div class="text-center">
@@ -64,5 +72,16 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.4/dist/js/bootstrap.bundle.min.js" integrity="sha384-YUe2LzesAfftltw+PEaao2tjU/QATaW/rOitAq67e0CT0Zi2VVRL0oC4+gAaeBKu" crossorigin="anonymous"></script>
+     
+    @if(session('login_error'))
+    <script>
+        Swal.fire({
+            title: 'Oopss..',
+            icon: 'error',
+            text: '{{ session("login_error") }}'
+        });
+    </script>
+    @endif
+    
   </body>
 </html>

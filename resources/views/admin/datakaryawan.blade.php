@@ -85,9 +85,24 @@
         </td>
       </tr>
 
+      
+
     
     </tbody>
   </table>
+
+  <div class="d-flex justify-content-between align-items-center w-100">
+    <div>Showing 1 to 2 of 2 entries</div>
+    <div class="ms-auto">
+        <nav>
+            <ul class="pagination mb-0">
+                <li class="disabled"><a class="page-link" href="#" style="border: none">Prev</a></li>
+                <li class="active"><a class="page-link" href="#" style="background-color: #917ECD; border: none">1</a></li>
+                <li class="disabled"><a class="page-link" href="#" style="border: none">Next</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
   
   {{-- tambah --}}
   <div class="modal fade w-100  " id="dataModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
