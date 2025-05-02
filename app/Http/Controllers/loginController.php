@@ -19,7 +19,7 @@ class LoginController extends Controller
  
          }
          return view('login');
-      }
+        }
      
      public function proses_login (Request $request){
        
@@ -30,30 +30,20 @@ class LoginController extends Controller
          
          
          $credential = $request->only('email','password');
-        //  $unamenya=User::where('email', $credential['email'])->first();
-        //  dd($credential);
-        //  dd(Auth::attempt($credential));
-         
  
          if(Auth::attempt($credential)){
              $user =  Auth::user();
  
              return redirect()->route('dashboard');
          }
-        //  Alert::alert('Gagal login', 'Username atau Password anda salah', 'error');
+       
          return redirect()->route('login')->with('login_error', 'Email atau Password salah, Silahkan coba lagi')
              ->withInput();
       }
 
       public function logout(Request $request){
-        // logout itu harus menghapus session nya 
-        
                 $request->session()->flush();
-        
-        // jalan kan juga fungsi logout pada auth 
-        
                 Auth::logout();
-        // kembali kan ke halaman login
                 return Redirect()->route('login');
               }
 }

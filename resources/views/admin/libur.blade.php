@@ -1,88 +1,100 @@
 @extends('admin.layout')
-@section('judul','Dashboard')
+@section('judul','Hari Libur')
 @section('content')
 
     <h2 class="mb-4" style="color:#917ECD; margin-top:80px;">Hari Libur</h2>
     <hr style="height: 2px; color:#917ECD;">
 
-
-    <div class="d-flex justify-content-between align-items-center mb-2">
         <div class="d-flex align-items-center gap-2">
-            <button type="button" class="btn text-white" style="background-color: #917ECD;">Tambah</button>
+          <button type="button" class="btn text-white" style="background-color: #917ECD;" data-bs-toggle="modal" data-bs-target="#liburModal">
+            <img src="{{ asset('image/tambah.svg') }}" alt="" style="width: 20px; margin-right: 8px;">
+             Tambah Hari Libur </button>
         </div>
-        <div>
-            <label class="mb-0">
-                Search:
-                <input type="search" class="form-control d-inline w-auto" placeholder="">
-            </label>
-        </div>
-    </div>
-    <table class="table table-bordered table-striped mb-5">
+    <table id="example">
     <thead class="text-center">
       <tr>
         <th scope="col" style="background-color: #917ECD;">No</th>
         <th scope="col" style="background-color: #917ECD;">Tanggal</th>
         <th scope="col" style="background-color: #917ECD;">Keterangan</th>
+        <th scope="col" style="background-color: #917ECD;">Aksi</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td class="text-center">1</td>
-        <td>2025-01-01</td>
-        <td>Tahun Baru Masehi</td>
-      </tr>
-      <tr>
-        <td class="text-center">2</td>
-        <td>2025-03-29</td>
-        <td>Hari Raya Nyepi</td>
-      </tr>
-      <tr>
-        <td class="text-center">3</td>
-        <td>2025-04-18</td>
-        <td>Wafat Isa Almasih</td>
-      </tr>
-      <tr>
-        <td class="text-center">4</td>
-        <td>2025-05-01</td>
-        <td>Hari Buruh Internasional</td>
-      </tr>
-      <tr>
-        <td class="text-center">5</td>
-        <td>2025-05-29</td>
-        <td>Kenaikan Isa Almasih</td>
-      </tr>
-      <tr>
-        <td class="text-center">6</td>
-        <td>2025-06-01</td>
-        <td>Hari Lahir Pancasila</td>
-      </tr>
-      <tr>
-        <td class="text-center">7</td>
-        <td>2025-06-06</td>
-        <td>Hari Raya Idul Adha 1446 H</td>
-      </tr>
-      <tr>
-        <td class="text-center">8</td>
-        <td>2025-06-26</td>
-        <td>Tahun Baru Islam 1447 H</td>
-      </tr>
-      <tr>
-        <td class="text-center">9</td>
-        <td>2025-08-17</td>
-        <td>Hari Kemerdekaan RI</td>
-      </tr>
-      <tr>
-        <td class="text-center">10</td>
-        <td>2025-10-06</td>
-        <td>Maulid Nabi Muhammad SAW</td>
-      </tr>
-      <tr>
-        <td class="text-center">11</td>
-        <td>2025-12-25</td>
-        <td>Hari Raya Natal</td>
-      </tr>
-    </tbody>
+      <?php $dcc=0 ?>
+      @foreach($liburs as $y)
+          <tr>
+              <td class="text-center">{{ ++$dcc }}</td>
+              <td>{{ $y->tanggal }}</td>
+              <td>{{ $y->keterangan }}</td>
+              <td class="text-center">
+                <button type="button" class="btn btn-sm me-1" style="background-color: #f86c6c;" onclick="deleteData({{ $y->id }})">Hapus</button>
+              </td>
+          </tr>
+      @endforeach
+      </tbody>
+      
   </table>
+
+  <div class="modal fade w-100  " id="liburModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: #917ECD;">
+          <h1 class="modal-title fs-3 text-white" id="exampleModalLabel">Hari Libur</h1>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ route('libur') }}" class="rounded" style=" background-color: #ffffff; border: none; box-shadow: none;" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="row">
+              <div class="mb-3">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" class="form-control" id="tanggal" name="tanggal">
+              </div>
+              <div class="mb-3">
+                <label for="ket" class="form-label">Keterangan</label>
+                <input type="text" class="form-control" id="ket" name="ket">
+              </div>
+
+            <div class="modal-footer">
+              <button type="submit" class="btn border-2" style="background-color: #a195c7; border-color: #F5CEFB; padding: 10px;">Tambah</button>
+              <button type="cancel" class="btn btn-secondary border-2" style="border-color: #faf7fa; padding: 10px;" data-bs-dismiss="modal">Batal</button>
+            </div>
+          </form>          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.datatables.net/2.3.0/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.3/js/dataTables.buttons.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/3.2.3/js/buttons.html5.min.js"></script>
+
+
+  <script>
+ new DataTable('#example');
+</script>
+
+<form id="form-hapus" method="POST" action="" style="display: none;">
+  @csrf
+  @method('DELETE')
+</form>
+
+  <script>
+    function deleteData(id) {
+      if (confirm('Yakin mau hapus?')) {
+        const form = document.getElementById('form-hapus');
+        form.action = "/libur/" + id;
+        form.submit();
+      }
+    }
+  </script>
   
 
 

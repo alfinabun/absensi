@@ -16,19 +16,25 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LoginController::class,'index'])->name('login');
-Route::post('/login', [LoginController::class,'proses_login'])->name('proses_login');
-Route::get('/logout', [LoginController::class,'logout'])->name('logout');
+Route::post('login', [LoginController::class,'proses_login'])->name('proses_login');
+Route::get('logout', [LoginController::class,'logout'])->name('logout');
 
 
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin', [AdminController::class,'index'])->name('dashboard');
     Route::get('/setting', [AdminController::class,'setting'])->name('setting');
-    Route::get('/data', [AdminController::class,'data'])->name('data');
+    Route::get('/akun', [AdminController::class,'akun'])->name('akun');
     Route::get('/datapegawai', [AdminController::class,'datapegawai'])->name('data_pegawai');
+    Route::post('/tambah', [AdminController::class,'tambahpegawai'])->name('tambah_pegawai');
+    Route::put('/update/{id}', [AdminController::class,'update'])->name('update');
     Route::get('/kehadiran', [AdminController::class,'kehadiran'])->name('kehadiran');
     Route::get('/libur', [AdminController::class,'libur'])->name('libur');
+    Route::post('/libur', [AdminController::class,'simpan_libur'])->name('simpan_libur');
+    Route::delete('/libur/{id}', [AdminController::class,'delete_libur'])->name('delete_libur');
+    Route::delete('/delete/{id}', [AdminController::class,'delete'])->name('delete');
 });
+
 
 
 Route::get('/welcome', function () {

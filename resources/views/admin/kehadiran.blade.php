@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('judul','Dashboard')
+@section('judul','Kehadiran')
 @section('content') 
     <h2 class="mb-4" style="color:#917ECD; margin-top:80px;">Absensi</h2>
     <hr style="height: 2px; color:#917ECD;">

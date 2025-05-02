@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Pegawai;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -17,28 +19,31 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
             //
+
             $user = [
                 [
-                    'username'=>'admin',
-                    'name'=>'AkunAdmin',
                     'email'=>'admin@gmail.com',
                     'level'=>'admin',
-                    'password'=>Hash::make('123')
+                    'password'=>Hash::make('123'),
+                    'foto' => 'alfi.png',
+                    'nik' => '241109',
+                    'nama' => 'Abun',
+                    'jenisKelamin' => 'Laki-laki',
+                    'alamat' => 'Jakarta',
+                    'jabatan' => 'Ceo',
+                    'notelp' => '081906806724'
                 ],
-                
                 [
-                    'username'=>'user1',
-                    'name'=>'AkunUser1',
-                    'email'=>'user1@gmail.com',
+                    'email'=>'user@gmail.com',
                     'level'=>'user',
-                    'password'=>Hash::make('123456')
-                ],
-                [
-                    'username'=>'user2',
-                    'name'=>'AkunUser2',
-                    'email'=>'user2@gmail.com',
-                    'level'=>'user',
-                    'password'=>Hash::make('123456')
+                    'password'=>Hash::make('1234'),
+                    'foto' => 'abun.png',
+                    'nik' => '241102',
+                    'nama' => 'Alfi',
+                    'jenisKelamin' => 'Perempuan',
+                    'alamat' => 'Jakarta',
+                    'jabatan' => 'Sekretaris',
+                    'notelp' => '081906806724',
                 ],
     
             ];
