@@ -3,12 +3,12 @@
       <div> <a href="#" class="nav_logo"> <img src="{{ asset('image/logokarya.png') }}" alt="" class="navlog"> <span class="nav_logo-name judul">ABSENSI KARYAWAN</span> </a>
 
           <div class="d-flex gap-3 ps-3 align-items-center">
-              <img src="{{ asset('image/fila.jpg') }}" alt="" width="35px"class="rounded-circle">
-              <p class="mt-3 text-white"> Nafilah Diasty </p>
+              <img src="{{ asset('image/' . Auth::user()->foto) }}" alt="" width="35px"class="rounded-circle profile-img">
+              <span class="text-white">{{ Auth::user()->nama }}</span>
           </div><hr style="height: 2px;" class="bg-white mx-3">
           <div class="nav_list"> 
       
-            <a href="{{ route('dashboard') }}" class="nav_link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <a href="{{ route('admin.dashboard') }}" class="nav_link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
               <img src="{{ asset('image/dashboard.svg') }}" alt="" width="40%">
               <span class="nav_name dashboard">Dashboard</span>
             </a>
@@ -47,7 +47,7 @@
           </div>
 
           
-      </div> <a href="{{ route('logout') }}" class="nav_link active"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
+      {{-- </div> <a href="{{ route('logout') }}" class="nav_link active"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a> --}}
   </nav>
   
 </div>

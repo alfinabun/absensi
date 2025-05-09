@@ -42,6 +42,8 @@
   <tbody>
     <?php $dcc=0 ?>
     @foreach ($data as $a)
+    {{-- @if ($a->level=='User') --}}
+      
       <tr>
         <td class="text-center">{{ ++$dcc }}</td>
         <td class="text-center">
@@ -59,6 +61,8 @@
           <button type="button" class="btn btn-sm me-1" style="background-color: #f86c6c;" onclick="hapusData({{ $a->id }})">Hapus</button>
         </td>
       </tr>
+    {{-- @endif --}}
+
 
       <!-- Modal Detail -->
       <div class="modal fade w-100" id="detailModal{{ $a->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $a->id }}" aria-hidden="true" data-bs-backdrop="false">

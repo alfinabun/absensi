@@ -116,7 +116,8 @@ class AdminController extends Controller
     }
 
     public function kehadiran() {
-        return view('admin.kehadiran');
+        $absen = User::all();
+        return view('admin.kehadiran', compact('absen'));
     }
 
     public function libur() {
