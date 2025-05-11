@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/libur', [AdminController::class, 'libur'])->name('libur');
     Route::post('/libur', [AdminController::class, 'simpan_libur'])->name('simpan_libur');
     Route::delete('/libur/{id}', [AdminController::class, 'delete_libur'])->name('delete_libur');
+    Route::post('/settingabsen', [AdminController::class, 'settingabsen'])->name('setting.absen');
     Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
 });
 

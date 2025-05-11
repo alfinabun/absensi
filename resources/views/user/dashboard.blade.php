@@ -42,10 +42,19 @@
 
     <div class="col-sm-8 mt-3">
       <div class="card mb-4" style="height: 300px; border: none; background-color: #B3A6DD; width: 100%;">
-        <div class="card-body d-flex justify-content-center align-items-center">
-          <h5 class="card-title fw-bold fs-3">LOKASI</h5>
+        <div class="card-body d-flex justify-content-center align-items-center" id="demo">
+          <iframe class="p-3" style="left:0;top:0;height:100%;width:100%;position:absolute;" src="https://maps.google.com/maps?q=-5.026052709502253, 119.46774814238094&output=embed" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
         </div>
       </div>
+      <button onclick="getLocation()">Try It</button>
+
+<?php
+$locationA = ['latitude' => -5.049199143001038, 'longitude' => 119.4933889798537]; // istanbul, 
+$locationB = ['latitude' => -5.136439352077125, 'longitude' => 119.47791190640497]; // berlin, 
+?>
+{{ $jaraknya }}
+
 
       <div class="card" style="height: 200px; border: none; background-color: #ffffff; width: 100%;">
         <div class="card-body">
@@ -65,5 +74,25 @@
     </div>
   </div>
 </div>
+
+<script>
+  const x = document.getElementById("demo");
+  
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else { 
+      x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+  }
+  
+  function success(position) {
+    x.innerHTML = "<iframe class='p-3' style='left:0;top:0;height:100%;width:100%;position:absolute;' src='https://maps.google.com/maps?q="+ position.coords.latitude +", " + position.coords.longitude + "&output=embed' width='800' height='600' style='border:0;''  loading='lazy' referrerpolicy='no-referrer-when-downgrade'></iframe>";
+  }
+  
+  function error() {
+    alert("Sorry, no position available.");
+  }
+  </script>
 
 @endsection

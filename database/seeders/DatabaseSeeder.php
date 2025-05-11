@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             $user = [
                 [
                     'email'=>'admin@gmail.com',
-                    'level'=>'admin',
+                    'level'=>'Admin',
                     'password'=>Hash::make('123'),
                     'foto' => 'alfi.png',
                     'nik' => '241109',
@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
                 ],
                 [
                     'email'=>'user@gmail.com',
-                    'level'=>'user',
+                    'level'=>'User',
                     'password'=>Hash::make('1234'),
                     'foto' => 'abun.png',
                     'nik' => '241102',

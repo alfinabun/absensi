@@ -49,11 +49,11 @@
         <td class="text-center">
           <img src="{{ asset('image/'.$a->foto) }}" alt="Foto Karyawan" width="60px" height="60px">
         </td>
-        <td>{{ $a->nik }}</td>
+        <td class="text-center">{{ $a->nik }}</td>
         <td>{{ $a->nama }}</td>
         <td>{{ $a->jenisKelamin }}</td>
         <td>{{ $a->jabatan }}</td>
-        <td>{{ $a->notelp }}</td>
+        <td class="text-center" >{{ $a->notelp }}</td>
         <td>{{ $a->level }}</td>
         <td class="text-center">
           <button type="button" class="btn btn-sm me-1" style="background-color: #c5a3fc;" data-bs-toggle="modal" data-bs-target="#detailModal{{ $a->id }}">Detail</button>
@@ -139,11 +139,16 @@
                   <div class="col-sm-6 mb-3">
                     <label for="position" class="form-label">Jabatan</label>
                     <select class="form-select" id="position" name="jabatan">
+                      <option value="">-- Pilih Jabatan --</option>
                       <option value="Sekretaris" {{ $a->jabatan == 'Sekretaris' ? 'selected' : '' }}>Sekretaris</option>
                       <option value="Manajer" {{ $a->jabatan == 'Manajer' ? 'selected' : '' }}>Manajer</option>
                       <option value="Staff" {{ $a->jabatan == 'Staff' ? 'selected' : '' }}>Staff</option>
+                      <option value="Kepala Divisi" {{ $a->jabatan == 'Kepala Divisi' ? 'selected' : '' }}>Kepala Divisi</option>
+                      <option value="IT Support / Programmer" {{ $a->jabatan == 'IT Support / Programmer' ? 'selected' : '' }}>IT Support / Programmer</option>
+                      <option value="Operator" {{ $a->jabatan == 'Operator' ? 'selected' : '' }}>Operator</option>
                     </select>
                   </div>
+                  
 
                   <div class="col-sm-6 mb-3">
                     <label for="phoneNumber" class="form-label">No Telp</label>
@@ -217,14 +222,20 @@
               <label for="email" class="form-label">Email</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan Email" required>
             </div>
+
             <div class="col-sm-6 mb-3">
               <label for="jabatan" class="form-label">Jabatan</label>
               <select class="form-select" id="jabatan" name="jabatan" required>
+                <option value="">-- Pilih Jabatan --</option>
                 <option value="Sekretaris">Sekretaris</option>
                 <option value="Manajer">Manajer</option>
                 <option value="Staff">Staff</option>
+                <option value="Kepala Divisi">Kepala Divisi</option>
+                <option value="IT Support / Programmer">IT Support / Programmer</option>
+                <option value="Operator">Operator</option>
               </select>
             </div>
+            
             <div class="col-sm-6 mb-3">
               <label for="notelp" class="form-label">No Telp</label>
               <input type="text" class="form-control" id="notelp" name="notelp" placeholder="Masukkan No Telp" required>

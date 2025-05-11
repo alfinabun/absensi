@@ -21,6 +21,7 @@
       <tbody>
         <?php $dcc=0 ?>
         @foreach ($absen as $k)
+        
         <tr>
           <td class="text-center">{{ ++$dcc }}</td>
           <td class="text-center">
@@ -29,25 +30,25 @@
           <td>{{ $k->nama }}</td>
           <td class="text-center">
             @if ($k->absen_masuk)
-              <span class="badge bg-success">{{ $k->absen_masuk }}</span>
+              <span class="badge bg-success rounded-0">{{ $k->absen_masuk }}</span>
             @else
-              <span class="badge bg-warning">Belum Absen</span>
+              <span class="badge bg-warning rounded-0">Belum Absen</span>
             @endif
           </td>
           
           <td class="text-center">
             @if ($k->absen_keluar)
-              <span class="badge bg-success">{{ $k->absen_keluar }}</span>
+              <span class="badge bg-success rounded-0">{{ $k->absen_keluar }}</span>
             @else
-              <span class="badge bg-warning">Belum Absen</span>
+              <span class="badge bg-warning rounded-0">Belum Absen</span>
             @endif
           </td>          
           <td></td>
           <td class="text-center">
             @if ($k->izin)
-              <span class="badge bg-success">{{ $k->izin }}</span>
+              <span class="badge bg-success rounded-0">{{ $k->izin }}</span>
             @else
-              <span class="badge bg-primary">Tidak</span>
+              <span class="badge bg-primary rounded-0">Tidak</span>
             @endif
           </td>   
           <td></td>
@@ -56,11 +57,35 @@
       </tbody>
     </table>
     
-
-
       <div class="card p-3 mb-5">
         <h3 class="mb-4">Riwayat Absensi</h3>
-              
+        <form action="" class="row g-3 mb-4">
+          <div class="col-auto">
+            <label for="bulan" class="col-form-label">Bulan:</label>
+          </div>
+          <div class="col-auto">
+            <select name="bulan" id="bulan" class="form-select">
+              @for ($m = 1; $m <= 12; $m++)
+                <option value="{{ $m }}" {{ request('bulan') == $m ? 'selected' : '' }}>
+                  {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                </option>
+              @endfor
+            </select>
+          </div>
+          <div class="col-auto">
+            <label for="tahun" class="col-form-label">Tahun:</label>
+          </div>
+          <div class="col-auto">
+            <select name="tahun" id="tahun" class="form-select">
+              @for ($y = date('Y'); $y >= 2020; $y--)
+                <option value="{{ $y }}" {{ request('tahun') == $y ? 'selected' : '' }}>{{ $y }}</option>
+              @endfor
+            </select>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn" style="background-color: #917ECD;">Tampilkan</button>
+          </div>
+        </form>
         
         <table id="example" >
             <thead class="text-center">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Libur;
+use App\Models\SettingAbsen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,7 +15,9 @@ class AdminController extends Controller
     }
 
     public function setting() {
-        return view('admin.setting');
+        $lokasi = SettingAbsen::first();
+
+        return view('admin.setting', compact('lokasi'));
     }
 
     // pegawai
@@ -35,7 +38,6 @@ class AdminController extends Controller
             'alamat' => 'required',
             'jabatan' => 'required',
             'notelp' => 'required',
-            'email' => 'required',
         ]);
 
         $pegawai = new User();
@@ -48,7 +50,6 @@ class AdminController extends Controller
         $pegawai->alamat = $request->alamat;
         $pegawai->jabatan = $request->jabatan;
         $pegawai->notelp = $request->notelp;
-        $pegawai->email = $request->email;
 
         if ($request->hasFile('foto')) {
             $namaasli = $request->file('foto')->getClientOriginalName();
@@ -58,10 +59,6 @@ class AdminController extends Controller
         } else {
             return redirect()->back()->with('error', 'foto tidak ditemukan!');
         }
-
-       
-        $pegawai->password = Hash::make('12345678'); 
-        $pegawai->level = 'pegawai'; 
 
         $pegawai->save();
         session()->flash('success_message', 'Data berhasil ditambahkan!');
@@ -140,11 +137,26 @@ class AdminController extends Controller
     
     }
 
-    public function delete_libur(string $id)
+    public function settingabsen(Request $request)
     {
-        $libur = Libur::findOrFail($id);
-        $libur->delete();
-        return redirect()->route('libur');
+        
+        $validated = $request->validate([
+            'jam_masuk' => 'required|date_format:H:i',
+            'jam_keluar' => 'required|date_format:H:i',
+            'lokasi' => 'required|string',
+            'batas_jarak' => 'required|numeric',
+        ]);
+
+        // dd($validated);
+        $setting = SettingAbsen::first();
+        if ($setting) {
+            $setting->update($validated);
+        } else {
+            SettingAbsen::create($validated);
+        }
+
+
+        return redirect()->route('setting')->with('success', 'Pengaturan Absensi berhasil disimpan!');
     }
 
 }
