@@ -3,11 +3,11 @@
   <div class="jamw" id="waktu"></div>
   
   
-  <div class="dropdown me-3">
+  <div class="dropdown me-3 ">
     <div class="dropdown-toggle" data-bs-toggle="dropdown" style="cursor: pointer; position: relative;">
       <img src="{{ asset('image/' . Auth::user()->foto) }}" alt="Foto Profil" class="rounded-circle profile-img">
     </div>
-    <ul class="dropdown-menu dropdown-menu-end">
+    <ul class="dropdown-menu dropdown-menu-end ">
       <li><span class="dropdown-item-text fw-bold">{{ Auth::user()->nama }}</span></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Setting Profil</a></li>

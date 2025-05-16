@@ -11,12 +11,12 @@
              Tambah Hari Libur </button>
         </div>
     <table id="example">
-    <thead class="text-center">
+    <thead >
       <tr>
-        <th scope="col" style="background-color: #917ECD;">No</th>
-        <th scope="col" style="background-color: #917ECD;">Tanggal</th>
-        <th scope="col" style="background-color: #917ECD;">Keterangan</th>
-        <th scope="col" style="background-color: #917ECD;">Aksi</th>
+        <th class="text-center" scope="col" style="background-color: #917ECD;">No</th>
+        <th class="text-center" scope="col" style="background-color: #917ECD;">Tanggal</th>
+        <th class="text-center" scope="col" style="background-color: #917ECD;">Keterangan</th>
+        <th class="text-center" scope="col" style="background-color: #917ECD;">Aksi</th>
       </tr>
     </thead>
     <tbody>
@@ -24,8 +24,8 @@
       @foreach($liburs as $y)
           <tr>
               <td class="text-center">{{ ++$dcc }}</td>
-              <td>{{ $y->tanggal }}</td>
-              <td>{{ $y->keterangan }}</td>
+              <td class="text-center">{{ $y->tanggal }}</td>
+              <td class="text-center">{{ $y->keterangan }}</td>
               <td class="text-center">
                 <button type="button" class="btn btn-sm me-1" style="background-color: #f86c6c;" onclick="deleteData({{ $y->id }})">Hapus</button>
               </td>
@@ -88,14 +88,22 @@
 
   <script>
     function deleteData(id) {
-      if (confirm('Yakin mau hapus?')) {
+      if (confirm('Yakin nich dihapus?')) {
         const form = document.getElementById('form-hapus');
         form.action = "/libur/" + id;
         form.submit();
       }
     }
   </script>
-  
 
+@if(session('success_message'))
+<script>
+    Swal.fire({
+        title: 'Sukses!',
+        icon: 'success',
+        text: '{{ session("success_message") }}'
+    });
+</script>
+@endif
 
 @endsection

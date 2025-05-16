@@ -6,26 +6,25 @@
 
     
     <table id="example1" class="table table-bordered table-hover align-middle">
-      <thead class="text-center">
+      <thead>
         <tr>
-          <th style="background-color: #917ECD;">No</th>
-          <th style="background-color: #917ECD;" class="col-1">Foto</th>
-          <th style="background-color: #917ECD;">Nama Karyawan</th>
-          <th style="background-color: #917ECD;">Absen Masuk</th>
-          <th style="background-color: #917ECD;">Absen Keluar</th>
-          <th style="background-color: #917ECD;">Status</th>
-          <th style="background-color: #917ECD;">Izin</th>
-          <th style="background-color: #917ECD;">Keterangan</th>
+          <th class="text-center" style="background-color: #917ECD;">No</th>
+          <th class="text-center" style="background-color: #917ECD;" class="col-1">Foto</th>
+          <th class="text-center" style="background-color: #917ECD;">Nama Karyawan</th>
+          <th class="text-center" style="background-color: #917ECD;">Absen Masuk</th>
+          <th class="text-center" style="background-color: #917ECD;">Absen Keluar</th>
+          <th class="text-center" style="background-color: #917ECD;">Status</th>
+          <th class="text-center" style="background-color: #917ECD;">Keterangan</th>
         </tr>
       </thead>
       <tbody>
         <?php $dcc=0 ?>
         @foreach ($absen as $k)
-        
+        @if ($k->level=='User')
         <tr>
           <td class="text-center">{{ ++$dcc }}</td>
           <td class="text-center">
-            <img src="{{ asset('image/'.$k->foto) }}" alt="Foto Karyawan" width="60px" height="60px">
+            <img src="{{ asset('image/'.$k->foto) }}" alt="Foto Karyawan" width="60px" height="60px" class="img-fluid">
           </td>
           <td>{{ $k->nama }}</td>
           <td class="text-center">
@@ -43,19 +42,77 @@
               <span class="badge bg-warning rounded-0">Belum Absen</span>
             @endif
           </td>          
-          <td></td>
           <td class="text-center">
-            @if ($k->izin)
-              <span class="badge bg-success rounded-0">{{ $k->izin }}</span>
+            @if ($k->status)
+              @if ($k->status == 'pending')
+              <span style="cursor:pointer;" class="badge bg-success rounded-0" data-bs-toggle="modal" data-bs-target="#izinModal{{ $k->id }}">{{ $k->status }}</span>
+              @else
+                <span class="badge bg-success rounded-0">{{ $k->status }}</span>
+              @endif
             @else
-              <span class="badge bg-primary rounded-0">Tidak</span>
+              <span>-</span>
             @endif
           </td>   
-          <td></td>
+          <td>{{ $k->ket_izin }}</td>
         </tr>
+        @endif
+        <div class="modal fade w-100" id="izinModal{{ $k->id }}" tabindex="-1" aria-labelledby="detailModalLabel{{ $k->id }}" aria-hidden="true" data-bs-backdrop="false">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: #917ECD;">
+                <h5 class="modal-title text-white" id="detailModalLabel{{ $k->id }}">Detail Karyawan</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <form action="{{ route('terimaizin') }}" method="POST" class="rounded" style="background-color: #ffffff; border: none; box-shadow: none;"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="tanggal" class="form-label">Nama : </label>
+                            {{ $k->nama}}
+                        </div>
+                        <input type="hidden" name="user_id" value="{{ $k->user_id }}">
+                        <div class="mb-3">
+                          <label for="tanggal" class="form-label">Tanggal : </label>
+                          {{ $k->tanggal}}
+                      </div>
+                        <div class="mb-3">
+                            <label for="ket" class="form-label">Alasan : </label>
+                            {{ $k->ket_izin }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="alasan" class="form-label">Terima / Tolak</label>
+                            <select name="alasan" id="alasan" class="form-select">
+                                <option value="">-- Pilih --</option>
+                                <option value="izin">Terima</option>
+                                <option value="absen">Tolak</option>
+                            </select>
+                        </div>
+
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn border-2"
+                            style="background-color: #a195c7; border-color: #F5CEFB; padding: 10px;">Tambah</button>
+                        <button type="button" class="btn btn-secondary border-2"
+                            style="border-color: #faf7fa; padding: 10px;" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
         @endforeach
       </tbody>
     </table>
+
     
       <div class="card p-3 mb-5">
         <h3 class="mb-4">Riwayat Absensi</h3>

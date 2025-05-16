@@ -36,12 +36,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/libur/{id}', [AdminController::class, 'delete_libur'])->name('delete_libur');
     Route::post('/settingabsen', [AdminController::class, 'settingabsen'])->name('setting.absen');
     Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
+    Route::post('/terimaizin', [AdminController::class, 'terimaizin'])->name('terimaizin');
+
 });
 
 // user
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/user', [UserController::class, 'index'])->name('user.dashboard');
     Route::get('/dataabsen', [UserController::class, 'data_absen'])->name('data_absen');
+    Route::post('/masuk', [UserController::class, 'masuk'])->name('masuk');
+    Route::post('/keluar', [UserController::class, 'keluar'])->name('keluar');
+    Route::post('/izin', [UserController::class, 'izin'])->name('izin');
 });
 
 

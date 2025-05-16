@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\SettingAbsen;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -120,5 +121,19 @@ class Helper
         return round($arcCosDist * $radius*1000, 2);
      }
 
+     public static function lokasiKantor()
+     {
+        $lokasi = SettingAbsen::first();
+
+        return $lokasi->lokasi;
+        
+     }
+     public static function jarakKantor()
+     {
+        $jarak = SettingAbsen::first();
+
+        return $jarak->batas_jarak;
+        
+     }
 
 }

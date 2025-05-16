@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absensi;
 use App\Models\User;
 use App\Models\Libur;
 use App\Models\SettingAbsen;
@@ -11,7 +12,12 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     public function index() {
-        return view('admin.dashboard');
+        $jumlahKaryawan = User::count();
+        $totalHadir = 24; 
+        $totalIzin = 6;  
+        $jumlahLokasi = 1; 
+
+        return view('admin.dashboard', compact('jumlahKaryawan', 'totalHadir', 'totalIzin', 'jumlahLokasi'));
     }
 
     public function setting() {
@@ -22,7 +28,7 @@ class AdminController extends Controller
 
     // pegawai
     public function datapegawai() {
-        $data = User::all();
+        $data = User::orderBy('nama')->get();
         return view('admin.datakaryawan', compact('data'));
     }
 
@@ -61,7 +67,7 @@ class AdminController extends Controller
         }
 
         $pegawai->save();
-        session()->flash('success_message', 'Data berhasil ditambahkan!');
+        session()->flash('tambah_data', 'Data berhasil ditambahkan!');
         return redirect()->route('data_pegawai');
     }
 
@@ -98,7 +104,7 @@ class AdminController extends Controller
         }
 
         $pegawai->update();
-        session()->flash('success_message', 'Data berhasil diubah!');
+        session()->flash('edit_data', 'Data berhasil diubah!');
         return redirect()->route('data_pegawai');
     }
 
@@ -113,7 +119,15 @@ class AdminController extends Controller
     }
 
     public function kehadiran() {
-        $absen = User::all();
+        $tanggal = gmdate('Y-m-d', time());
+
+        $absen = User::leftJoin('absensis as b', function($join) use ($tanggal) {
+            $join->on('users.id', '=', 'b.user_id')
+                 ->whereDate('b.tanggal', '=', $tanggal);
+            })
+        ->select('users.*', 'b.*')
+        ->get();
+
         return view('admin.kehadiran', compact('absen'));
     }
 
@@ -137,6 +151,14 @@ class AdminController extends Controller
     
     }
 
+    public function delete_libur($id)
+    {
+        $libur = Libur::findOrFail($id);
+        $libur->delete();
+
+        return redirect()->route('libur')->with('success', 'Data libur berhasil dihapus.');
+    }
+
     public function settingabsen(Request $request)
     {
         
@@ -157,6 +179,26 @@ class AdminController extends Controller
 
 
         return redirect()->route('setting')->with('success', 'Pengaturan Absensi berhasil disimpan!');
+    }
+
+    public function terimaizin(Request $request)
+    {
+        $request->validate([
+            'alasan'  => ['required', 'string'],
+
+        ]);
+        $tanggal = gmdate('Y-m-d', time());
+
+
+        $hadir = Absensi::where('user_id', '=', $request->user_id)->where('tanggal', '=', $tanggal)->first();
+        // dd($hadir);
+        $izin = Absensi::findOrFail($hadir->id);
+            $izin->status     = $request->alasan;
+            $izin->update();
+
+
+        return redirect()->route('kehadiran');
+                         
     }
 
 }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('level');
             $table->rememberToken();
             $table->string('foto');
-            $table->string('nik');
+            $table->string('nik')->unique();
             $table->string('nama');
             $table->string('jenisKelamin');
             $table->string('alamat');

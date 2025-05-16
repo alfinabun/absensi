@@ -25,29 +25,29 @@
 
 <hr style="height: 2px; color:#917ECD;">
 
-<table id="example" class="stripe" >
+<table id="example" class="table table-bordered table-hover align-middle">
   <thead class=" text-center">
     <tr>
-      <th style="background-color: #917ECD;" scope="col">No</th>
-      <th style="background-color: #917ECD;" scope="col" class="col-1">Foto</th>
-      <th style="background-color: #917ECD;" scope="col">Nik</th>
-      <th style="background-color: #917ECD;" scope="col">Nama</th>
-      <th style="background-color: #917ECD;" scope="col">Jenis Kelamin</th>
-      <th style="background-color: #917ECD;" scope="col">Jabatan</th>
-      <th style="background-color: #917ECD;" scope="col">No Telp</th>
-      <th style="background-color: #917ECD;" scope="col">Level</th>
-      <th style="background-color: #917ECD;" scope="col" class="col-2">Aksi</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col">No</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col" class="col-1">Foto</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col">Nik</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col">Nama</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col">Jenis Kelamin</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col">Jabatan</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col">No Telp</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col">Level</th>
+      <th class="text-center" style="background-color: #917ECD;" scope="col" class="col-2">Aksi</th>
     </tr>
   </thead>
   <tbody>
     <?php $dcc=0 ?>
     @foreach ($data as $a)
-    {{-- @if ($a->level=='User') --}}
+    @if ($a->level=='User')
       
       <tr>
         <td class="text-center">{{ ++$dcc }}</td>
         <td class="text-center">
-          <img src="{{ asset('image/'.$a->foto) }}" alt="Foto Karyawan" width="60px" height="60px">
+          <img src="{{ asset('image/'.$a->foto) }}" alt="Foto Karyawan" width="60px" height="60px" class="img-fluid">
         </td>
         <td class="text-center">{{ $a->nik }}</td>
         <td>{{ $a->nama }}</td>
@@ -61,7 +61,7 @@
           <button type="button" class="btn btn-sm me-1" style="background-color: #f86c6c;" onclick="hapusData({{ $a->id }})">Hapus</button>
         </td>
       </tr>
-    {{-- @endif --}}
+    @endif
 
 
       <!-- Modal Detail -->
@@ -75,7 +75,7 @@
             <div class="modal-body">
               <div class="row">
                 <div class="col-md-4 text-center">
-                  <img src="{{ asset('image/'.$a->foto) }}" alt="Foto Karyawan" class="img-fluid rounded" width="150">
+                  <img src="{{ asset('image/'.$a->foto) }}" alt="Foto Karyawan" class="img-fluid rounded" width="250">
                 </div>
                 <div class="col-md-8">
                   <ul class="list-group list-group-flush">
@@ -273,7 +273,7 @@
 
 <script>
   function hapusData(id) {
-    if (confirm('Yakin mau hapus?')) {
+    if (confirm('Yakin nich dihapus?')) {
       const form = document.getElementById('form-hapus');
       form.action = "/delete/" + id;
       form.submit();
@@ -305,22 +305,22 @@ let table = new DataTable('#example');
 
 </script>
 
-@if(session('success_message'))
+@if(session('tambah_data'))
     <script>
         Swal.fire({
             title: 'Sukses!',
             icon: 'success',
-            text: '{{ session("success_message") }}'
+            text: '{{ session("tambah_data") }}'
         });
     </script>
 @endif
 
-@if(session('success_message'))
+@if(session('edit_data'))
     <script>
         Swal.fire({
             title: 'Sukses!',
             icon: 'success',
-            text: '{{ session("success_message") }}'
+            text: '{{ session("edit_data") }}'
         });
     </script>
 @endif
