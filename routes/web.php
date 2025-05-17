@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
@@ -37,6 +38,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/settingabsen', [AdminController::class, 'settingabsen'])->name('setting.absen');
     Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('delete');
     Route::post('/terimaizin', [AdminController::class, 'terimaizin'])->name('terimaizin');
+    Route::get('/profiladmin', [AdminController::class, 'profiladmin'])->name('profiladmin');
+    Route::post('/updateprofil', [AdminController::class, 'updateprofil'])->name('updateprofil');
+
 
 });
 
@@ -47,6 +51,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/masuk', [UserController::class, 'masuk'])->name('masuk');
     Route::post('/keluar', [UserController::class, 'keluar'])->name('keluar');
     Route::post('/izin', [UserController::class, 'izin'])->name('izin');
+    Route::get('/profiluser', [UserController::class, 'profiluser'])->name('profiluser');
+    Route::post('/ubahprofil', [UserController::class, 'ubahprofil'])->name('ubahprofil');
+
 });
 
 
@@ -55,5 +62,10 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
-
+Route::get('/cc', function () {
+    Artisan::call('optimize:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    return "Cache is cleared";
+});
 

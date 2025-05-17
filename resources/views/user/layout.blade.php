@@ -291,7 +291,7 @@
 
 <body id="body-pd" style="background-color: #F5F5F5;">
     <!--Container Main start-->
-    @include('admin.nav')
+    @include('user.nav')
     @include('user.side')
     @yield('content')
 

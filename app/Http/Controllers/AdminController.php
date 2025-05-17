@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Absensi;
 use App\Models\User;
 use App\Models\Libur;
+use App\Models\Absensi;
 use App\Models\SettingAbsen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
     public function index() {
-        $jumlahKaryawan = User::count();
-        $totalHadir = 24; 
-        $totalIzin = 6;  
-        $jumlahLokasi = 1; 
+        $tanggal = gmdate('Y-m-d', time() + (60 * 60 * 8));
 
-        return view('admin.dashboard', compact('jumlahKaryawan', 'totalHadir', 'totalIzin', 'jumlahLokasi'));
+        $jumlahKaryawan = User::count();
+
+        $totalHadir = Absensi::where('tanggal', '=', $tanggal)->where('status', '=', 'hadir')->count(); 
+        $totalIzin = Absensi::where('tanggal', '=', $tanggal)->where('status', '=', 'izin')->count();;  
+        $totalAbsen = $jumlahKaryawan - $totalHadir - $totalIzin; 
+
+        return view('admin.dashboard', compact('jumlahKaryawan', 'totalHadir', 'totalIzin', 'totalAbsen'));
     }
 
     public function setting() {
@@ -57,6 +62,7 @@ class AdminController extends Controller
         $pegawai->jabatan = $request->jabatan;
         $pegawai->notelp = $request->notelp;
 
+
         if ($request->hasFile('foto')) {
             $namaasli = $request->file('foto')->getClientOriginalName();
             $namaunik = time() . '_' . $namaasli;
@@ -65,6 +71,7 @@ class AdminController extends Controller
         } else {
             return redirect()->back()->with('error', 'foto tidak ditemukan!');
         }
+        dd($request->password);
 
         $pegawai->save();
         session()->flash('tambah_data', 'Data berhasil ditambahkan!');
@@ -119,7 +126,7 @@ class AdminController extends Controller
     }
 
     public function kehadiran() {
-        $tanggal = gmdate('Y-m-d', time());
+        $tanggal = gmdate('Y-m-d', time()+ (60 * 60 * 8));
 
         $absen = User::leftJoin('absensis as b', function($join) use ($tanggal) {
             $join->on('users.id', '=', 'b.user_id')
@@ -128,7 +135,13 @@ class AdminController extends Controller
         ->select('users.*', 'b.*')
         ->get();
 
-        return view('admin.kehadiran', compact('absen'));
+        $riwayat = DB::table('absensis')
+        ->join('users', 'absensis.user_id', '=', 'users.id')
+        ->select('users.nama', 'absensis.*')
+        ->orderBy('absensis.tanggal', 'desc')
+        ->get();
+
+        return view('admin.kehadiran', compact('absen', 'riwayat'));
     }
 
     public function libur() {
@@ -187,7 +200,7 @@ class AdminController extends Controller
             'alasan'  => ['required', 'string'],
 
         ]);
-        $tanggal = gmdate('Y-m-d', time());
+        $tanggal = gmdate('Y-m-d', time() + (60 * 60 * 8));
 
 
         $hadir = Absensi::where('user_id', '=', $request->user_id)->where('tanggal', '=', $tanggal)->first();
@@ -200,5 +213,30 @@ class AdminController extends Controller
         return redirect()->route('kehadiran');
                          
     }
+    public function profiladmin(){
+        return view('admin.profil');
+    }
+    public function updateprofil(Request $request){
+        $user = Auth::user();
 
+        $validated = $request->validate([
+            'nama'     => 'required',
+            'email'    => 'required|email',
+            'password' => 'required|string',
+            'foto'     => 'nullable|image',   
+        ]);
+        $user = User::findOrFail(Auth::user()->id);
+        $user->nama = $validated['nama'];
+        $user->email = $validated['email'];
+        $user->password=$validated['password'];
+        if ($request->hasFile('foto')) {
+            $namaasli = $request->file('foto')->getClientOriginalName();
+            $namaunik = time() . '_' . $namaasli;
+            $request->file('foto')->move(public_path('image'), $namaunik);
+            $user->foto = $namaunik;
+        }
+        $user->update();
+
+        return redirect()->route('profiladmin')->with('profiladmin', 'Profil berhasil diubah');
+    }
 }

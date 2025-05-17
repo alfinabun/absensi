@@ -10,7 +10,7 @@
     <ul class="dropdown-menu dropdown-menu-end ">
       <li><span class="dropdown-item-text fw-bold">{{ Auth::user()->nama }}</span></li>
       <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Setting Profil</a></li>
+      <li><a class="dropdown-item" href="{{ route('profiladmin') }}"><i class="bi bi-gear me-2"></i>Setting Profil</a></li>
       <li><a class="dropdown-item text-danger" href="{{ route('logout') }}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
     </ul>
   </div>

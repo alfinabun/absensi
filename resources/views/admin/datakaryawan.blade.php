@@ -163,7 +163,7 @@
                   <div class="col-sm-6 mb-3">
                     <label for="level" class="form-label">Level</label>
                     <select class="form-select" id="level" name="level">
-                      <option value="Admin" {{ $a->level == 'Admin' ? 'selected' : '' }}>Admin</option>
+                      {{-- <option value="Admin" {{ $a->level == 'Admin' ? 'selected' : '' }}>Admin</option> --}}
                       <option value="User" {{ $a->level == 'User' ? 'selected' : '' }}>User</option>
                     </select>
                   </div>
@@ -247,7 +247,7 @@
             <div class="col-sm-6 mb-3">
               <label for="level" class="form-label">Level</label>
               <select class="form-select" id="level" name="level" required>
-                <option value="Admin">Admin</option>
+                {{-- <option value="Admin">Admin</option> --}}
                 <option value="User">User</option>
               </select>
             </div>
@@ -295,7 +295,7 @@
 let table = new DataTable('#example');
  
  new DataTable.Buttons(table, {
-     buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+     buttons: ['excel', 'pdf']
  });
   
  table

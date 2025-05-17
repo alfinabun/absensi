@@ -53,20 +53,21 @@
                 {{-- <button class="btn btn-sm border-2 text-white" style="background-color: #a195c7; border-color: #F5CEFB; padding: 10px;" onclick="getLocation()">Lokasi anda</button> --}}
 
 
-
                 <div class="card mt-2 mb-3" style="height: 175px; border: none; background-color: #ffffff; width: 100%;">
                     <div class="card-body">
                         <h5 class="card-title fs-4">Jadwal Absen</h5>
+                        @if ($lokasi)
                         <div class="card" style="height: 35px; background-color: #917ECD;">
                             <div class="card-body p-0 d-flex justify-content-center align-items-center">
-                                <p class="mb-0 text-white">Jam Masuk 08:00</p>
+                                <p class="mb-0 text-white">Jam Masuk {{ $lokasi->jam_masuk }}</p>
                             </div>
                         </div>
                         <div class="card mt-2" style="height: 35px; background-color: #917ECD;">
                             <div class="card-body p-0 d-flex justify-content-center align-items-center">
-                                <p class="mb-0 text-white">Jam Keluar 16:00</p>
+                                <p class="mb-0 text-white">Jam Masuk {{ $lokasi->jam_keluar }}</p>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>

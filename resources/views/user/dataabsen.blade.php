@@ -1,9 +1,23 @@
 @extends('user.layout')
-@section('judul', 'Data Karyawan')
+@section('judul', 'Absensi Karyawan')
 @section('content')
 
     <h2 class="mb-4" style="color:#917ECD; margin-top:80px;">Absensi</h2>
     <hr style="height: 2px; color:#917ECD;">
+    @if ($presensi == 1)
+    <div class="row justify-content-center">
+
+        <div class="col-sm-12 mb-3">
+                <div class="card" name="absen_masuk"
+                style="width: 100%; height: 100px; border: none; box-shadow: none; background-color: #a6f29c;">
+                <div class="card-body d-flex justify-content-center align-items-center">
+                    <h5 class="card-title fs-4">TIDAK ADA JADWAL PRESENSI</h5>
+                </div>
+                </div>
+        </div>
+
+    </div>  
+    @else
     <div class="row justify-content-center">
 
         <div class="col-sm-4 mb-3">
@@ -34,7 +48,7 @@
              </form>
 
         </div>
-        
+        @if ($izin )
         <div class="col-sm-4 mb-3">
             <div class="card"
                 style="width: 100%; height: 100px; border: none; box-shadow: none; background-color: #84c2fc; cursor:pointer;"
@@ -44,12 +58,16 @@
                 </div>
             </div>
         </div>
+        @endif
+        
 
-    </div>
+    </div>   
+    @endif
 
     <div class="card p-3 mb-5">
         <h3 class="mb-4">Riwayat Absensi</h3>
-        <form action="" class="row g-3 mb-4">
+
+        {{-- <form action="" class="row g-3 mb-4">
             <div class="col-auto">
                 <label for="bulan" class="col-form-label">Bulan:</label>
             </div>
@@ -76,50 +94,44 @@
             <div class="col-auto">
                 <button type="submit" class="btn" style="background-color: #917ECD;">Tampilkan</button>
             </div>
-        </form>
+        </form> --}}
 
-        <table id="example">
-            <thead class="text-center">
+        <table id="example" class="table table-bordered table-horver">
+            <thead>
                 <tr>
-                    <th style="background-color: #917ECD;">ID</th>
-                    <th style="background-color: #917ECD;" class="col-1">Foto</th>
-                    <th style="background-color: #917ECD;">Tanggal</th>
-                    <th style="background-color: #917ECD;">Nama Karyawan</th>
-                    <th style="background-color: #917ECD;">Absen Masuk</th>
-                    <th style="background-color: #917ECD;">Absen Keluar</th>
-                    <th style="background-color: #917ECD;">Status</th>
-                    <th style="background-color: #917ECD;">Keterangan</th>
-                    <th style="background-color: #917ECD;">Aksi</th>
+                    <th class="text-center" style="background-color: #917ECD;">No</th>
+                    <th class="text-center" style="background-color: #917ECD;">Tanggal</th>
+                    <th class="text-center" style="background-color: #917ECD;">Absen Masuk</th>
+                    <th class="text-center" style="background-color: #917ECD;">Absen Keluar</th>
+                    <th class="text-center" style="background-color: #917ECD;">Status</th>
+                    <th class="text-center" style="background-color: #917ECD;">Keterangan</th>
                 </tr>
             </thead>
             <tbody>
-     
-                <tr class="text-center">
-                    <td>1</td>
-                    <td><img src="{{ asset('image/download.jpg') }}" alt="Foto Karyawan" width="60px" height="60px"></td>
-                    <td>2025-04-17</td>
-                    <td>Abun</td>
-                    <td>08:00</td>
-                    <td>17:00</td>
-                    <td>Hadir</td>
-                    <td>-</td>
-                    <td class="text-center">
-                        <a href="#" class="btn btn-sm " style="background-color:#98faa0;">Detail</a>
-                    </td>
-                </tr>
-                <tr class="text-center">
-                    <td>2</td>
-                    <td><img src="{{ asset('image/mark lee.jpg') }}" alt="Foto Karyawan" width="60px" height="60px"></td>
-                    <td>2025-04-17</td>
-                    <td>Mark lee</td>
-                    <td>08:00</td>
-                    <td>17:00</td>
-                    <td>Hadir</td>
-                    <td>-</td>
-                    <td class="text-center">
-                        <a href="#" class="btn btn-sm " style="background-color:#98faa0;">Detail</a>
-                    </td>
-                </tr>
+                <?php $i = 0; ?>
+                @foreach ($riwayat as $r)
+                    <tr>
+                        <td class="text-center">{{ ++$i }}</td>
+                        <td class="text-center">{{ $r->tanggal }}</td>
+                        <td class="text-center">
+                            <span class="badge bg-success rounded-0">{{ $r->absen_masuk }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-success rounded-0">{{ $r->absen_keluar }}</span>
+                        </td>
+                        <td>
+                            @if ($r->status == 'pending')
+                                <span class="badge bg-warning rounded-0">{{ $r->status }}</span>
+                            @elseif ($r->status == 'izin')
+                                <span class="badge bg-danger rounded-0">{{ $r->status }}</span>
+                            @else
+                                <span class="badge bg-primary rounded-0">{{ $r->status }}</span>
+                            
+                            @endif
+                        </td>
+                        <td>{{ $r->ket_izin }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
     </div>

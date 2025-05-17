@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Models\Absensi;
+use App\Models\Libur;
+use App\Models\SettingAbsen;
+use App\Models\User;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,17 +23,35 @@ class UserController extends Controller
         $locationA = ['latitude' => $lock[0],  'longitude' => $lock[1]];  
         $locationB = ['latitude' => -5.136902788259322,  'longitude' => 119.47881286468731];  
 
-     
+        $lokasi = SettingAbsen::first();
         $jaraknya = Helper::howLong($locationA, $locationB);
-
-        return view('user.dashboard', compact('jaraknya','lock'));
+        
+        return view('user.dashboard', compact('jaraknya','lock', 'lokasi'));
     }
 
     public function data_absen() {
-        return view('user.dataabsen');
+        $satuJamLagi = date('Y-m-d H:i:s', strtotime('+1 hour'));
+        $timezone = time() + (60 * 60 * 8);
+        $tanggal = gmdate('Y-m-d', $timezone);
+        $jam    = gmdate('H:i:s', $timezone);
+        $jam_kerja = SettingAbsen::first();
+        $jamMasukBaru = date('H:i:s', strtotime("1970-01-01 $jam_kerja->jam_masuk -1 hour"));
+        $jamKeluarBaru = date('H:i:s', strtotime("1970-01-01 $jam_kerja->jam_keluar +1 hour"));
+        $jamKeluar = date('H:i:s', strtotime("1970-01-01 $jam_kerja->jam_keluar"));
+        // dd($jamMasukBaru < $jam);
+        $libur = Libur::where('tanggal', $tanggal)->exists();
+        if(($jamMasukBaru < $jam) and ($jamKeluarBaru > $jam) and !$libur){
+            $presensi = '0';
+        }else{
+            $presensi = '1';
+        }
+            $izin = $jam < $jamKeluar;
+            // dd($izin);
+        $riwayat = Absensi::where('user_id', '=', Auth::user()->id)->get();
+        return view('user.dataabsen', compact('presensi', 'riwayat', 'izin'));
     } 
     public function masuk(Request $request) {
-        $timezone = time();
+        $timezone = time()+ (60 * 60 * 8);
         $tanggal = gmdate('Y-m-d', $timezone);
         $jam    = gmdate('H:i:s', $timezone);
         $hari     =  gmdate('l', $timezone);
@@ -43,8 +65,12 @@ class UserController extends Controller
         $jaraknya = Helper::howLong($lokasikantor, $lokasiuser);
 
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
+        $liburAll = Libur::get();
 
-        if($hari == 'Saturday' or $hari == 'Sunday'){
+        $hariIni = date('Y-m-d'); 
+        $libur = Libur::where('tanggal', $tanggal)->exists();
+
+        if($hari == 'Saturday' or $hari == 'Monday' or $libur){
             return redirect()->route('data_absen')->with('libur', 'Hari ini tuch libur gais sumpah');
         }
         else{
@@ -81,7 +107,7 @@ class UserController extends Controller
     } 
 
     public function keluar(Request $request) {
-        $timezone = time();
+        $timezone = time()+ (60 * 60 * 8);
         $tanggal = gmdate('Y-m-d', $timezone);
         $jam    = gmdate('H:i:s', $timezone);
         $hari     =  gmdate('l', $timezone);
@@ -97,19 +123,24 @@ class UserController extends Controller
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
         // dd($hadir->id);
         if($hadir){
-            if ($jaraknya > $jarakKantor){
-                return redirect()->route('data_absen')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
-            }
-            else{
-                // dd(Auth::user()->id);
-                // $nugu = Absensi::first();
-                // dd($nugu->user->nama);
-                $absen = Absensi::findOrFail($hadir->id);
-                $absen->absen_keluar = $jam;
-                $absen->lokasi_keluar = $request['lat'].', '.$request['long'];
-                $absen->ket_keluar = 'tepat waktu';
-                $absen->update();
-                return redirect()->route('data_absen')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
+            if($hadir->status == 'izin'){
+                return redirect()->route('data_absen')->with('terimaizin', 'Hari ini anda izin');
+
+            }else{
+                if($jaraknya > $jarakKantor){
+                    return redirect()->route('data_absen')->with('warning', 'Anda terlalu jauh dari lokasi kantor untuk melakukan absensi. ')->with('jaraknya', $jaraknya);
+                }
+                else{
+                    // dd(Auth::user()->id);
+                    // $nugu = Absensi::first();
+                    // dd($nugu->user->nama);
+                    $absen = Absensi::findOrFail($hadir->id);
+                    $absen->absen_keluar = $jam;
+                    $absen->lokasi_keluar = $request['lat'].', '.$request['long'];
+                    $absen->ket_keluar = 'tepat waktu';
+                    $absen->update();
+                    return redirect()->route('data_absen')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
+                }
             }
         }else{
             return redirect()->route('data_absen')->with('absen', 'Anda belum absen masuk!');
@@ -147,7 +178,7 @@ class UserController extends Controller
             'ket_izin'=> ['required', 'string'],
 
         ]);
-        $tanggal = gmdate('Y-m-d', time());
+        $tanggal = gmdate('Y-m-d', time() + (60 * 60 * 8));
 
         $hadir = Absensi::where('user_id', '=', Auth::user()->id)->where('tanggal', '=', $tanggal)->first();
         if($hadir){
@@ -167,6 +198,33 @@ class UserController extends Controller
 
         return redirect()->route('data_absen')->with('izin', 'Pengajuan izin berhasil dikirim!');
                          
+    }
+    public function profiluser(){
+        return view('user.profil');
+    }
+
+    public function ubahprofil(Request $request){
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'nama'     => 'required',
+            'email'    => 'required|email',
+            'password' => 'required|string',
+            'foto'     => 'nullable|image',   
+        ]);
+        $user = User::findOrFail(Auth::user()->id);
+        $user->nama = $validated['nama'];
+        $user->email = $validated['email'];
+        $user->password=$validated['password'];
+        if ($request->hasFile('foto')) {
+            $namaasli = $request->file('foto')->getClientOriginalName();
+            $namaunik = time() . '_' . $namaasli;
+            $request->file('foto')->move(public_path('image'), $namaunik);
+            $user->foto = $namaunik;
+        }
+        $user->update();
+
+        return redirect()->route('profiluser')->with('profiluser', 'Profil berhasil diubah');
     }
 
 }
