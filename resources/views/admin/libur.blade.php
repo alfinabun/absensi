@@ -5,11 +5,11 @@
     <h2 class="mb-4" style="color:#917ECD; margin-top:80px;">Hari Libur</h2>
     <hr style="height: 2px; color:#917ECD;">
 
-        <div class="d-flex align-items-center gap-2">
+   
           <button type="button" class="btn text-white" style="background-color: #917ECD;" data-bs-toggle="modal" data-bs-target="#liburModal">
             <img src="{{ asset('image/tambah.svg') }}" alt="" style="width: 20px; margin-right: 8px;">
              Tambah Hari Libur </button>
-        </div>
+
     <table id="example">
     <thead >
       <tr>

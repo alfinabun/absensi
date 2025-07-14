@@ -70,10 +70,10 @@
                     @enderror
                 </div>
 
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="form-label">Konfirmasi Password Baru</label>
                     <input type="password" name="konfir_pw" class="form-control">
-                </div>
+                </div> --}}
 
                 <div class="mb-3">
                     <label class="form-label">Foto Profil</label>

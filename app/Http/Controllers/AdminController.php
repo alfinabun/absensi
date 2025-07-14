@@ -71,7 +71,7 @@ class AdminController extends Controller
         } else {
             return redirect()->back()->with('error', 'foto tidak ditemukan!');
         }
-        dd($request->password);
+        // dd($request->password);
 
         $pegawai->save();
         session()->flash('tambah_data', 'Data berhasil ditambahkan!');
@@ -118,7 +118,7 @@ class AdminController extends Controller
     public function delete(string $id) {
         $pegawai = User::findOrFail($id);
         $pegawai->delete();
-        return redirect()->route('data_pegawai');
+        return redirect()->route('data_pegawai')->with('delete', 'Data karyawan berhasil dihapus!');
     }
 
     public function akun() {
@@ -182,16 +182,21 @@ class AdminController extends Controller
             'batas_jarak' => 'required|numeric',
         ]);
 
-        // dd($validated);
-        $setting = SettingAbsen::first();
-        if ($setting) {
-            $setting->update($validated);
-        } else {
-            SettingAbsen::create($validated);
+        if($request->jam_masuk < $request->jam_keluar){
+
+            $setting = SettingAbsen::first();
+            if ($setting) {
+                $setting->update($validated);
+            } else {
+                SettingAbsen::create($validated);
+            }
+            return redirect()->route('setting')->with('success', 'Pengaturan Absensi berhasil disimpan!');
+        }else{
+            return redirect()->route('setting')->with('error', 'Pengaturan Anda gagal disimpan!');
+            
         }
 
 
-        return redirect()->route('setting')->with('success', 'Pengaturan Absensi berhasil disimpan!');
     }
 
     public function terimaizin(Request $request)

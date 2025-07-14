@@ -1,12 +1,11 @@
 @extends('user.layout')
 @section('judul','Update Profil')
 @section('content')
-<div class="row">
-    <div class="col-sm-4 mt-3 mb-3 d-flex">
-        <div class="card" style="padding: 20px; border: none; background-color:#DFCDE1; width: 100%;">
+<div class="row d-flex align-items-stretch">
+    <div class="col-sm-4 mt-3 mb-3">
+        <div class="card" style="padding: 20px; border: none; background-color:#DFCDE1; height:100%;">
             <div class="text-center pt-4">
-                <img src="{{ asset('image/' . Auth::user()->foto) }}" alt="Foto" width="100%"
-                    class="rounded-circle profile-imgg" style="max-width: 250px;">
+                <img src="{{ asset('image/' . Auth::user()->foto) }}" alt="Foto" class="rounded-circle profile-imgg" style="max-width: 250px; width: 100%;">
             </div>
 
             <div class="card my-4" style="height: 50px; background-color: #917ECD;">
@@ -39,7 +38,7 @@
     </div>
 
     <div class="col-sm-8 mt-3 mb-3">
-        <div class="card" style="padding: 20px;">
+        <div class="card" style="padding: 20px; height:100%;">
             <h4 style="color:#917ECD;">Update Profil</h4>
             <hr style="height: 2px; color:#917ECD;">
 
@@ -71,11 +70,6 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Konfirmasi Password Baru</label>
-                    <input type="password" name="konfir_pw" class="form-control">
-                </div>
-
-                <div class="mb-3">
                     <label class="form-label">Foto Profil</label>
                     <input type="file" name="foto" class="form-control">
                     @error('foto')
@@ -89,6 +83,7 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 @if (session('profiluser'))

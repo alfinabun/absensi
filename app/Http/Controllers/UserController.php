@@ -40,10 +40,11 @@ class UserController extends Controller
         $jamKeluar = date('H:i:s', strtotime("1970-01-01 $jam_kerja->jam_keluar"));
         // dd($jamMasukBaru < $jam);
         $libur = Libur::where('tanggal', $tanggal)->exists();
-        if(($jamMasukBaru < $jam) and ($jamKeluarBaru > $jam) and !$libur){
-            $presensi = '0';
-        }else{
+        // dd($jamKeluarBaru);
+        if(($jam < $jamMasukBaru) or ($jam > $jamKeluarBaru) or $libur){
             $presensi = '1';
+        }else{
+            $presensi = '0';
         }
             $izin = $jam < $jamKeluar;
             // dd($izin);
@@ -58,6 +59,7 @@ class UserController extends Controller
         $lokasikantor = Helper::lokasiKantor();
         $jarakKantor = Helper::jarakKantor();
         $lock = explode(', ', $lokasikantor); 
+        $jam_kerja = SettingAbsen::first();
         
         $lokasikantor = ['latitude' => $lock[0],  'longitude' => $lock[1]];  
         $lokasiuser = ['latitude' => $request['lat'],  'longitude' => $request['long']];  
@@ -70,7 +72,7 @@ class UserController extends Controller
         $hariIni = date('Y-m-d'); 
         $libur = Libur::where('tanggal', $tanggal)->exists();
 
-        if($hari == 'Saturday' or $hari == 'Monday' or $libur){
+        if($hari == 'Saturday' or $hari == 'Tuesday' or $libur){
             return redirect()->route('data_absen')->with('libur', 'Hari ini tuch libur gais sumpah');
         }
         else{
@@ -96,8 +98,14 @@ class UserController extends Controller
                     $absen->tanggal = $tanggal;
                     $absen->absen_masuk = $jam;
                     $absen->lokasi_masuk = $request['lat'].', '.$request['long'];
-                    $absen->ket_masuk = 'tepat waktu';
                     $absen->status = 'hadir';
+                    
+                    if($jam > $jam_kerja->jam_masuk){
+                        $absen->ket_masuk = 'terlambat';
+                    }
+                    else{
+                        $absen->ket_masuk = 'on time';
+                    }
                     $absen->save();
                     return redirect()->route('data_absen')->with('success', 'Anda berhasil absen masuk')->with('jaraknya', $jaraknya);
                 }
@@ -113,7 +121,9 @@ class UserController extends Controller
         $hari     =  gmdate('l', $timezone);
         $lokasikantor = Helper::lokasiKantor();
         $jarakKantor = Helper::jarakKantor();
-        $lock = explode(', ', $lokasikantor); 
+        $lock = explode(', ', $lokasikantor);
+        $jam_kerja = SettingAbsen::first();
+
 
         $lokasikantor = ['latitude' => $lock[0],  'longitude' => $lock[1]];  
         $lokasiuser = ['latitude' => $request['lat'],  'longitude' => $request['long']];  
@@ -137,7 +147,13 @@ class UserController extends Controller
                     $absen = Absensi::findOrFail($hadir->id);
                     $absen->absen_keluar = $jam;
                     $absen->lokasi_keluar = $request['lat'].', '.$request['long'];
-                    $absen->ket_keluar = 'tepat waktu';
+                    // dd($jam_kerja);
+                    if($jam < $jam_kerja->jam_keluar){
+                        $absen->ket_keluar = 'cepat pulang';
+                    }
+                    else{
+                        $absen->ket_keluar = 'on time';
+                    }
                     $absen->update();
                     return redirect()->route('data_absen')->with('success', 'Anda berhasil absen keluar')->with('jaraknya', $jaraknya);
                 }

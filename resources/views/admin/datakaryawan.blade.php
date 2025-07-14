@@ -35,7 +35,7 @@
       <th class="text-center" style="background-color: #917ECD;" scope="col">Jenis Kelamin</th>
       <th class="text-center" style="background-color: #917ECD;" scope="col">Jabatan</th>
       <th class="text-center" style="background-color: #917ECD;" scope="col">No Telp</th>
-      <th class="text-center" style="background-color: #917ECD;" scope="col">Level</th>
+      {{-- <th class="text-center" style="background-color: #917ECD;" scope="col">Level</th> --}}
       <th class="text-center" style="background-color: #917ECD;" scope="col" class="col-2">Aksi</th>
     </tr>
   </thead>
@@ -54,7 +54,7 @@
         <td>{{ $a->jenisKelamin }}</td>
         <td>{{ $a->jabatan }}</td>
         <td class="text-center" >{{ $a->notelp }}</td>
-        <td>{{ $a->level }}</td>
+        {{-- <td>{{ $a->level }}</td> --}}
         <td class="text-center">
           <button type="button" class="btn btn-sm me-1" style="background-color: #c5a3fc;" data-bs-toggle="modal" data-bs-target="#detailModal{{ $a->id }}">Detail</button>
           <button type="button" class="btn btn-sm me-1" style="background-color: #84c2fc;" data-bs-toggle="modal" data-bs-target="#editModal{{ $a->id }}">Edit</button>
@@ -109,7 +109,7 @@
                 <div class="row">
                   <div class="col-sm-6 mb-3">
                     <label for="photo" class="form-label">Foto Karyawan</label>
-                    <input type="file" class="form-control" id="photo" name="foto">
+                    <input type="file" accept="image/jpeg, image/png"  class="form-control" id="photo" name="foto">
                     <input type="hidden" name="old_foto" value="{{ $a->foto }}">
                   </div>
 
@@ -201,7 +201,7 @@
           <div class="row">
             <div class="col-sm-6 mb-3">
               <label for="foto" class="form-label">Foto Karyawan</label>
-              <input type="file" class="form-control" id="foto" name="foto" required>
+              <input type="file" accept="image/jpeg, image/png" class="form-control" id="foto" name="foto" required>
             </div>
             <div class="col-sm-6 mb-3">
               <label for="nik" class="form-label">Nik</label>
@@ -321,6 +321,15 @@ let table = new DataTable('#example');
             title: 'Sukses!',
             icon: 'success',
             text: '{{ session("edit_data") }}'
+        });
+    </script>
+@endif
+@if(session('delete'))
+    <script>
+        Swal.fire({
+            title: 'Sukses!',
+            icon: 'success',
+            text: '{{ session("delete") }}'
         });
     </script>
 @endif

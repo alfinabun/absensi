@@ -93,5 +93,14 @@
             });
         </script>
     @endif
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                title: 'Oopss..!',
+                icon: 'warning',
+                text: '{{ session('error') }}'
+            });
+        </script>
+    @endif
 
 @endsection

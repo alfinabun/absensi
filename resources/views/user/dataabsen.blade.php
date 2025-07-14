@@ -48,7 +48,7 @@
              </form>
 
         </div>
-        @if ($izin )
+        {{-- @if ($izin ) --}}
         <div class="col-sm-4 mb-3">
             <div class="card"
                 style="width: 100%; height: 100px; border: none; box-shadow: none; background-color: #84c2fc; cursor:pointer;"
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        @endif
+        {{-- @endif --}}
         
 
     </div>   
@@ -114,12 +114,24 @@
                         <td class="text-center">{{ ++$i }}</td>
                         <td class="text-center">{{ $r->tanggal }}</td>
                         <td class="text-center">
+                            @if ($r->ket_masuk=='terlambat')
+                                
+                            <span class="badge bg-danger rounded-0">{{ $r->absen_masuk }}</span>
+                            @else
+                                
                             <span class="badge bg-success rounded-0">{{ $r->absen_masuk }}</span>
+                            @endif
                         </td>
                         <td class="text-center">
+                            @if ($r->ket_keluar == 'cepat pulang')
+                                
+                            <span class="badge bg-danger rounded-0">{{ $r->absen_keluar }}</span>
+                            @else
+                                
                             <span class="badge bg-success rounded-0">{{ $r->absen_keluar }}</span>
+                            @endif
                         </td>
-                        <td>
+                        <td class="text-center">
                             @if ($r->status == 'pending')
                                 <span class="badge bg-warning rounded-0">{{ $r->status }}</span>
                             @elseif ($r->status == 'izin')
